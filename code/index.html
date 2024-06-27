@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SJST Insurance</title>
+    
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+    <link rel="stylesheet" type="text/css" href="../css/home.css">
+    <link rel="stylesheet" type="text/css" href="../css/feedback.css">
+
+</head>
+<body>
+  <div class="header mb-4" id="topheader">
+    <nav class="navbar navbar-expand-lg fixed-top">
+      
+      <a class="navbar-brand font-weight-bold text-white text-uppercase" href="#"><i class="fa fa-car" style="font-size:40px; color:black"></i>    SJST Insurance</a>
+      <button class="navbar-toggler" type="button"  data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon" ></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav ml-auto font-weight-bold text-uppercase">
+          <li class="nav-item active">
+            <a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href=" ">Purchase</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="#home-image">Claim</a>
+          </li>
+          <li class="nav-item">
+              <a class="nav-link" href=" ">Contact Us</a>
+            </li>
+        </ul>
+      </div>
+   
+    </nav>
+  </div>
+  <br><br><br>
+
+
+  <!--*************************************Feedback start***********************************-->
+ 
+  <section class="header-extradiv mt-5 mb-5" id="header-extradiv">
+    <div class="container">
+    <div class="row">
+      
+      <!--*********************************************image*************************************-->
+      <div class="col-lg-6 col-md-6 col-12" id="home-image">
+        <img src="../images/ima3.jpg" width="570" height="350" class="sample-image">
+        <div class="text-center mt-4">
+          <a href='admin-login.php'><button type='submit' id="home-button">Admin</button></a>
+          <a href='login.php'><button type='submit' id="home-button">User</button></a>
+        </div>
+      </div>
+      <!--*******************************************image end***********************************-->
+
+      <div class="contact_us col-lg-6 col-md-6 col-12">
+        <div class="section-form"> 
+            <h3 class="text-center m-4" id="contact-heading">Contact Us</h3> 
+            <form action="index.html" method="POST"> 
+                <div class="form-group"> 
+                    <input type="text" class="form-control" placeholder="Your Name" autocomplete="off" value ="" name="name" required><br> 
+                    <input type="email" class="form-control"  placeholder="Email ID" autocomplete="off" value="" name="email" required><br> 
+                    <textarea rows="5" class="form-control"  placeholder="Give a Feedback" autocomplete="off" name="feedback" required></textarea><br> 
+                    <button type="submit" class="btn btnprimary" id="submit_feedback" name="submit_feedback">Submit</button> 
+                </div> 
+            </form> 
+        </div>
+      </div>
+    </div>
+    </div>
+  </section>
+<!--*************************************Feedback end***********************************-->
+   
+    <!--**************************Footer *************************************-->
+    <footer class="text-center text-lg-start bg-dark text-muted fixed-bottom" >
+      <div class="text-center text-white" >
+        Follow us on: 
+        <a class="text-reset fw-bold" href=""><i class="fa fa-linkedin"></i> <i class="fa fa-facebook"></i>  <i class="fa fa-google"></i>     <i class="fa fa-instagram"></i>     <i class="fa fa-twitter"></i></a><br>
+    </div>
+      <div class="text-center text-white" >
+          © 2021 Copyright: 
+          <a class="text-reset fw-bold" href="">sjstinsurance.com</a>
+      </div><br>
+  </footer>
+  <!--******************************************* Footer End ******************************************-->
+
+  
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

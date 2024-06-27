@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>retrieve images</title>
+</head>
+<body>
+    <div id="productsDiv" class="container" >
+        <div class="productcard">
+
+        </div>
+    </div>
+    <label class=" col-lg-4 ">Vehicle No.</label>
+    <input class="form-control col-lg-8 " type='text' id='vr' placeholder='Enter Vehicle No.'/>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+        // import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+
+        const firebaseConfig = {
+        apiKey: "AIzaSyBzNxCcnq5Mgbq5ojojdXjs9TzYcGURFLM",
+        authDomain: "insure-10fea.firebaseapp.com",
+        databaseURL: "https://insure-10fea-default-rtdb.firebaseio.com",
+        projectId: "insure-10fea",
+        storageBucket: "insure-10fea.appspot.com",
+        messagingSenderId: "952535704771",
+        appId: "1:952535704771:web:eecd76bd76d4d4ebdc2e76",
+        measurementId: "G-6SN0GD7Q4S"
+        };      
+
+        const app = initializeApp(firebaseConfig);
+
+        import {getStorage, ref as sRef, uploadBytesResumable, getDownloadURL} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
+        import {getDatabase, ref, set, child, get, update, remove} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+
+        const realdb = getDatabase();
+
+        var vn = document.getElementById('vr');
+        var Outerdiv = document.getElementById('productsDiv');
+        var arrayofproducts = [];
+        window.addEventListener('load', getAllProducts);
+
+        function getAllProducts(){
+            const dbref = ref(realdb);
+            get(child(dbref, "WebApp/Claim/Documents1/"+ getVN() + "/"))
+            .then((snapshot) =>{
+                snapshot.forEach(prod=>{
+                    arrayofproducts.push(prod.val());
+                });
+                addAllProducts();
+            })
+        }
+
+        function addAllProducts(){
+            let i = 0;
+            arrayofproducts.forEach(prod =>{
+                addAProduct(prod, i++);
+            });
+        }
+
+        function addAProduct(product, index){
+            let html = ' <img src ="' + product.LinksofImagesArray[0] +'" id="thumb' + index + '"> '
+
+            let newprod = document.createElement('div');
+            newprod.classList.add('productcard');
+            newprod.innerHTML = html;
+            Outerdiv.append(newprod);
+        }
+
+        function getVN(){
+            let vhn = vn.value.substring(0,50);
+            return vhn;
+        }
+
+</script>
+
+</body>
+</html>

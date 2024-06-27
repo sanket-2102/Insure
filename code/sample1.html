@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>multiple images</title>
+
+    <style>
+        .imagesDivStyle{
+            width: 600px;
+            border: 1px solid black;
+            padding: 5px;
+        }
+
+        .imgs{
+            height: 80px;
+            width: 100px;
+            border: 1px solid black;
+            margin: 5px;
+        }
+    </style>
+</head>
+<body>
+    <label>Image Name</label> <input type="text" id="namebox">
+    <label>Vehicle No.</label>
+    <input type='text' id='vr' placeholder='Enter Vehicle No.'/>
+    <div id="imagediv"></div><br><br><br><br><br><br><br><br><br>
+    <label id="label"></label>
+    <label id="loadlab">Uploading 1 of 3</label><br><br>
+    <button id="sltbtn">Select</button><br><br>
+    <button id="adbtn">Add</button><br><br>
+    <button id="rbtn">Retrieve</button>
+
+    <script type="module">
+
+        var files=[];
+        var FileReaders = [];
+        var ImageLinksArray = [];
+
+        //const vn = document.getElementById('vr');
+        const vn = document.getElementById('vr');
+        const ign = document.getElementById('namebox');
+        const imgdiv = document.getElementById('imagediv');
+        const sb = document.getElementById('sltbtn');
+        const ab = document.getElementById('adbtn');
+        const rb = document.getElementById('rbtn');
+        const proglab = document.getElementById('loadlab');
+
+        function OpenFileDialog(){
+            let inp = document.createElement('input');
+            inp.type='file';
+            inp.multiple='multiple';
+            inp.onchange= (e)=>{
+                AssignImagesToFileArray(e.target.files);
+                CreateImgTags();
+            }
+            inp.click();
+        }
+
+        function AssignImagesToFileArray(thefiles){
+            let num = files.length + thefiles.length;
+            let looplim =(num <=15) ? thefiles.length :(15-files.length);
+
+            for (let i=0; i<looplim; i++){
+                files.push(thefiles[i]);
+            }
+            if(num>15) alert("Recheck the images");
+        }
+
+        function CreateImgTags(){
+            imgdiv.innerHTML='';
+            imgdiv.classList.add('imagesDivStyle');
+            
+            for (let i=0; i<files.length; i++){
+                FileReaders[i] = new FileReader();
+                
+                FileReaders[i].onload = function(){
+                    var img = document.createElement('img');
+                    img.id='imgNo' + i;
+                    img.classList.add('imgs');
+                    img.src= FileReaders[i].result;
+                    imgdiv.append(img);
+                }
+
+                FileReaders[i].readAsDataURL(files[i]);
+            }
+
+            let lab=document.getElementById('label');
+            lab.innerHTML = "clear images";
+            lab.style = "font-size: 12px";
+            lab.addEventListener('click',ClearImages);
+            imgdiv.append(lab);
+        }
+                function getVN(){
+                    let vhn = vn.value.substring(0,50);
+                    return vhn;
+                }
+                function getIg(){
+                    let ignm = ign.value.substring(0,50);
+                    return ignm;
+                }
+
+        function ClearImages(){
+            files= [];
+            ImageLinksArray= [];
+            imgdiv.innerHTML='';
+            imgdiv.classList.remove('imagesDivStyle');
+        }
+
+        sb.addEventListener('click',OpenFileDialog);
+        ab.addEventListener('click',UploadAllImages);
+
+
+        function GetImageUploadProgress(){
+            return 'Images Uploaded ' + ImageLinksArray.length + ' of' + files.length;
+        }
+
+        function isAllImagesUploaded(){
+            return ImageLinksArray.length == files.length;
+        }
+
+        function RestoreBack(){
+            sb.disabled=false;
+            ab.disabled=false;
+            proglab.innerHTML ='';
+        }
+
+
+        //upload
+
+        function UploadAllImages(){
+            sb.disabled=true;
+            ab.disabled=true;
+            
+            ImageLinksArray=[];
+            for (let i=0; i<files.length; i++){
+                UploadImage(files[i],i);
+            }
+        }
+
+        function UploadImage(imgToUpload, imgNo){
+            const metadata = {
+                contentType: imgToUpload.type
+            };
+
+            const storage = getStorage();
+            const imageAddress = "TheImages/"  +getVN() + '/img#' + (imgNo+ 1);
+            const storageRef = sRef(storage, imageAddress);
+            const UploadTask = uploadBytesResumable(storageRef,imgToUpload,metadata);
+
+            UploadTask.on('state_changed', (snapshot) =>{
+                proglab.innerHTML =GetImageUploadProgress();
+            },
+            (error)=>{
+                alert("error: image upload failed");
+            },
+
+            ()=>{
+                getDownloadURL(UploadTask.snapshot.ref).then((downloadURL) =>{
+                    ImageLinksArray.push(downloadURL);
+                    if(isAllImagesUploaded()){
+                        proglab.innerHTML = "all images uploaded";
+                        UploadAProduct();
+                    }
+                });
+            }
+            );
+        }
+
+
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js";
+       // import { getAnalytics } from "https://www.gstatic.com/firebasejs/9.6.10/firebase-analytics.js";
+        
+        const firebaseConfig = {
+          apiKey: "AIzaSyBzNxCcnq5Mgbq5ojojdXjs9TzYcGURFLM",
+          authDomain: "insure-10fea.firebaseapp.com",
+          databaseURL: "https://insure-10fea-default-rtdb.firebaseio.com",
+          projectId: "insure-10fea",
+          storageBucket: "insure-10fea.appspot.com",
+          messagingSenderId: "952535704771",
+          appId: "1:952535704771:web:eecd76bd76d4d4ebdc2e76",
+          measurementId: "G-6SN0GD7Q4S"
+        };      
+      
+        const app = initializeApp(firebaseConfig);
+
+        import {getStorage, ref as sRef, uploadBytesResumable, getDownloadURL} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-storage.js";
+        import {getDatabase, ref, set, child, get, update, remove} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js";
+        import {getFirestore, doc, getDoc, setDoc, collection, addDoc} from "https://www.gstatic.com/firebasejs/9.6.10/firebase-firestore.js"
+        const realdb = getDatabase();
+        const clouddb = getFirestore();
+
+        function UploadAProduct(){
+            set(ref(realdb, "WebApp/Sample/" + getVN() + "/"), {
+                LinksofImagesArray: ImageLinksArray
+            });
+
+            alert("upload successful");
+            RestoreBack();
+        }
+
+        document.getElementById('rbtn').onclick = function(){
+            const dbref = ref(realdb);
+            const imgn = document.getElementById('namebox');
+            const vhnm = document.getElementById('vr');
+           get(child(dbref,"WebApp/Sample/" + getVN() + "/"+ getIg()))
+           .then((snapshot) =>{
+                document.getElementById('imagediv').src = snapshot.val();
+            });
+        }
+    </script>
+
+</body>
+</html>
